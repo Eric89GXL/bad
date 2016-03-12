@@ -1,0 +1,19 @@
+language: python
+
+sudo: false
+
+before_install:
+  - wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b -p /home/travis/miniconda
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - wget -q https://staff.washington.edu/larsoner/bad.npy
+
+install:
+  # conda update --yes --quiet conda
+  - conda install --yes --quiet numpy scipy mkl libgfortran=1.0
+
+script:
+  - python -c "import numpy; numpy.show_config()"
+  - python -c "from scipy import linalg; import numpy as np; bad = np.load('bad.npy'); linalg.svd(bad);"
+
